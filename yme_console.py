@@ -40,7 +40,10 @@ def export_playlist(owner, kinds):
     all_file = ""
     for track in tracks:
         artists_names = ", ".join(artist['name'] for artist in track['artists'])
-        all_file += f"{artists_names} - {track['title']}\n"
+        version = ''
+        if track.get('version') is not None:
+            version = f' - {track.get('version')}'
+        all_file += f"{artists_names} - {track['title']}{version}\n"
 
     filename = f"{playlist_title}.txt"
     with open(filename, 'w', encoding='utf-8') as f:
