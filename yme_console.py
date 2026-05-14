@@ -49,12 +49,32 @@ def export_playlist(owner, kinds):
     print(f"Плейлист сохранен в файл: {filename}")
     print("Поддержите работу сервиса: https://aleqsanbr.dev. Спасибо за использование! 💜")
 
+def export_playlist_uuid(playlist_uuid):
+    response = requests.get(f'https://api.music.yandex.ru/playlist/{playlist_uuid}')
+    response.raise_for_status()
+
+    data = response.json()
+    playlist_title = data['result']['title']
+    tracks = data['result']['tracks']
+
+    tracks_lines = [
+        f"{', '.join(artist['name'] for artist in track['track']['artists'])} - {track['track']['title']}"
+        for track in tracks
+    ]
+
+    filename = f"{playlist_title}.txt"
+    with open(filename, 'w', encoding='utf-8') as f:
+        for track in tracks_lines:
+            f.write(track + "\n")
+
+    print(f"Плейлист сохранен в файл: {filename}")
+
 def handle_message(uri_raw):
     try:
         uri_raw = uri_raw.strip()
 
         iframe_match = re.search(r'src="https://music\.yandex\.[^/]+/iframe/playlist/([^/]+)/([^"]+)"', uri_raw)
-        new_format = re.match(r'https://music\.yandex\.[^/]+/playlists/', uri_raw)
+        new_format = re.match(r'https://music\.yandex\.[^/]+/playlists/([^?#\s]+)', uri_raw)
         old_format = re.match(r'https://music\.yandex\.[^/]+/users/[^/]+/playlists/', uri_raw)
 
         if iframe_match:
@@ -63,11 +83,8 @@ def handle_message(uri_raw):
             export_playlist(owner, kinds)
 
         elif new_format:
-            print("Ссылка нового формата! Получить HTML-код для экспорта:\n"
-                  "1. Откройте ссылку в браузере\n"
-                  "2. Нажмите «Поделиться» → «HTML код»\n"
-                  "3. Скопируйте код и вставьте его сюда\n\n"
-                  "Подробная инструкция: https://u-pov.ru/instructions/aleqs/1377")
+            uuid = new_format.group(1)
+            export_playlist_uuid(uuid)
 
         elif old_format:
             uri_parts = uri_raw.split('?')[0].split('/')
