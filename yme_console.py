@@ -18,15 +18,13 @@ def send_welcome():
           "Программа позволяет экспортировать любой плейлист Яндекс Музыки в текстовое " +
           "представление ИМЯ ИСПОЛНИТЕЛЯ - НАЗВАНИЕ ТРЕКА.\n\n" +
           "1. Скопируйте и вставьте ниже ссылку на плейлист вида:\n" +
-          "   https://music.yandex.ru/users/USERNAME/playlists/PLAYLIST_ID\n" +
-          "   Либо HTML-код плейлиста (кнопка «Поделиться» → «HTML код»).\n" +
-          "   Инструкция: https://u-pov.ru/instructions/aleqs/1377\n\n" +
+          "   https://music.yandex.ru/playlists/...\n\n" +
           "2. Если плейлист большой, может потребоваться некоторое время для обработки.\n" +
           "3. Если ссылка корректная, но возникает ошибка, то, вероятно, сработал 'бан' со " +
           "стороны Яндекса. В таком случае попробуйте еще раз через некоторое время или на " +
           "другом устройстве.\n" +
           "4. Предложения, критика и прочее принимаются тута: https://t.me/aleqsanbr")
-    print("Также функционал доступен на сайте :) https://files.u-pov.ru/programs/YandexMusicExport")
+    print("Также функционал доступен на сайте :) https://ymusicexport.ru и телеграм-бот https://t.me/yamusic_export_bot")
 
 def export_playlist(owner, kinds):
     uri = f"https://music.yandex.ru/handlers/playlist.jsx?owner={owner}&kinds={kinds}"
